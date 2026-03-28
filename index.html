@@ -63,8 +63,6 @@
     width: 100%; height: 100%;
     object-fit: cover;
   }
-  .video-bg video::-webkit-media-controls { display: none !important; }
-  .video-bg video::-webkit-media-controls-start-playback-button { display: none !important; }
 
   .video-overlay {
     position: absolute;
@@ -1147,7 +1145,7 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg" style="opacity: 0; transition: opacity 0.5s ease;">
       <source src="hero_intro.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1356,14 +1354,18 @@
       nav.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Force video autoplay on mobile (iOS fix)
+    // Hide video until playing, then fade in
     const bgVideo = document.querySelector('.video-bg video');
     if (bgVideo) {
       bgVideo.muted = true;
       bgVideo.setAttribute('muted', '');
+
+      bgVideo.addEventListener('playing', () => {
+        bgVideo.style.opacity = '1';
+      }, { once: true });
+
       bgVideo.play().catch(() => {});
 
-      // iOS fallback: play on any user interaction
       ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
         document.addEventListener(evt, () => {
           bgVideo.muted = true;
