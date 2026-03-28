@@ -63,6 +63,8 @@
     width: 100%; height: 100%;
     object-fit: cover;
   }
+  .video-bg video::-webkit-media-controls { display: none !important; }
+  .video-bg video::-webkit-media-controls-start-playback-button { display: none !important; }
 
   .video-overlay {
     position: absolute;
@@ -1145,7 +1147,7 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline preload="auto" poster="hero_fallback.jpg">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
       <source src="hero_intro.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1354,12 +1356,18 @@
       nav.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Force autoplay on mobile
+    // Force video autoplay on mobile (iOS fix)
     const bgVideo = document.querySelector('.video-bg video');
     if (bgVideo) {
-      bgVideo.play().catch(() => {
-        document.addEventListener('touchstart', () => {
-          bgVideo.play();
+      bgVideo.muted = true;
+      bgVideo.setAttribute('muted', '');
+      bgVideo.play().catch(() => {});
+
+      // iOS fallback: play on any user interaction
+      ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
+        document.addEventListener(evt, () => {
+          bgVideo.muted = true;
+          bgVideo.play().catch(() => {});
         }, { once: true });
       });
     }
