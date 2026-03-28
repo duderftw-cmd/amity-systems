@@ -1145,11 +1145,8 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video id="hero-intro" autoplay muted playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
+    <video id="hero-intro" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
       <source src="hero_intro.mp4" type="video/mp4">
-    </video>
-    <video id="hero-loop" muted loop playsinline webkit-playsinline preload="auto" style="opacity:0; transition: opacity 1.5s ease; pointer-events: none; visibility: hidden;">
-      <source src="hero_loop.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
   </div>
@@ -1357,17 +1354,25 @@
       nav.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Video: play intro once, then crossfade to seamless loop
+    // Crossfade to loop video after intro finishes first play
     const introVideo = document.getElementById('hero-intro');
-    const loopVideo = document.getElementById('hero-loop');
+    let switched = false;
 
-    introVideo.addEventListener('ended', () => {
-      loopVideo.play();
-      loopVideo.style.visibility = 'visible';
-      loopVideo.style.opacity = '1';
-      setTimeout(() => {
-        introVideo.style.display = 'none';
-      }, 1500);
+    introVideo.addEventListener('timeupdate', () => {
+      if (!switched && introVideo.currentTime >= introVideo.duration - 0.5) {
+        switched = true;
+        const loopVideo = document.createElement('video');
+        loopVideo.src = 'hero_loop.mp4';
+        loopVideo.muted = true;
+        loopVideo.loop = true;
+        loopVideo.playsInline = true;
+        loopVideo.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease;';
+        introVideo.parentElement.insertBefore(loopVideo, introVideo.nextSibling);
+        loopVideo.play().then(() => {
+          loopVideo.style.opacity = '1';
+          setTimeout(() => { introVideo.remove(); }, 1600);
+        });
+      }
     });
 
     // Hamburger menu toggle
