@@ -1371,7 +1371,7 @@
           </div>
           <div class="form-group">
             <label>Website URL</label>
-            <input type="url" name="website" placeholder="https://yourcompany.com">
+            <input type="text" name="website" placeholder="yourcompany.com">
           </div>
           <div class="form-group">
             <label>Tell us about your business</label>
@@ -1480,6 +1480,28 @@
         el.addEventListener('touchend', () => {
           setTimeout(() => el.classList.remove('touched'), 400);
         }, { passive: true });
+      });
+    }
+
+    // Form submission — stay on page, show success message
+    const contactForm = document.querySelector('form[name="contact"]');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(contactForm);
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        }).then(res => {
+          if (res.ok) {
+            contactForm.innerHTML = '<div style="text-align:center;padding:40px 0;"><h3 style="font-family:var(--font-display);font-size:24px;font-weight:700;margin-bottom:12px;color:var(--white);">Thank You!</h3><p style="color:rgba(255,255,255,0.7);font-size:15px;">We\'ll be in touch within 24 hours with your custom growth plan.</p></div>';
+          } else {
+            alert('Something went wrong. Please try again or email us directly.');
+          }
+        }).catch(() => {
+          alert('Something went wrong. Please try again or email us directly.');
+        });
       });
     }
   </script>
