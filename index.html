@@ -1145,7 +1145,7 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video id="hero-intro" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
       <source src="hero_intro.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1352,27 +1352,6 @@
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // Crossfade to loop video after intro finishes first play
-    const introVideo = document.getElementById('hero-intro');
-    let switched = false;
-
-    introVideo.addEventListener('timeupdate', () => {
-      if (!switched && introVideo.currentTime >= introVideo.duration - 0.5) {
-        switched = true;
-        const loopVideo = document.createElement('video');
-        loopVideo.src = 'hero_loop.mp4';
-        loopVideo.muted = true;
-        loopVideo.loop = true;
-        loopVideo.playsInline = true;
-        loopVideo.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.5s ease;';
-        introVideo.parentElement.insertBefore(loopVideo, introVideo.nextSibling);
-        loopVideo.play().then(() => {
-          loopVideo.style.opacity = '1';
-          setTimeout(() => { introVideo.remove(); }, 1600);
-        });
-      }
     });
 
     // Hamburger menu toggle
