@@ -1148,7 +1148,7 @@
     <video id="hero-intro" autoplay muted playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
       <source src="hero_intro.mp4" type="video/mp4">
     </video>
-    <video id="hero-loop" muted loop playsinline webkit-playsinline preload="auto" style="opacity:0; transition: opacity 1.5s ease;">
+    <video id="hero-loop" muted loop playsinline webkit-playsinline preload="auto" style="opacity:0; transition: opacity 1.5s ease; pointer-events: none; visibility: hidden;">
       <source src="hero_loop.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1363,6 +1363,7 @@
 
     introVideo.addEventListener('ended', () => {
       loopVideo.play();
+      loopVideo.style.visibility = 'visible';
       loopVideo.style.opacity = '1';
       setTimeout(() => {
         introVideo.style.display = 'none';
