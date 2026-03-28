@@ -51,16 +51,23 @@
   /* ═══ VIDEO BACKGROUND ═══ */
   .video-bg {
     position: fixed;
-    inset: 0;
+    top: 0; left: 0; right: 0;
+    height: 100svh;
+    height: -webkit-fill-available;
     z-index: 0;
     overflow: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .video-bg video {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
+    min-height: 100%;
     object-fit: cover;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .video-overlay {
@@ -1377,6 +1384,12 @@
   </section>
 
   <script>
+    // Lock video background height on load (prevents Chrome mobile resize jank)
+    const videoBg = document.querySelector('.video-bg');
+    if (videoBg) {
+      videoBg.style.height = window.innerHeight + 'px';
+    }
+
     // Nav scroll effect
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
