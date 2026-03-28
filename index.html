@@ -201,7 +201,8 @@
   .hero {
     position: relative;
     z-index: 10;
-    min-height: 100vh;
+    min-height: 100svh;
+    min-height: -webkit-fill-available;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1384,11 +1385,12 @@
   </section>
 
   <script>
-    // Lock video background height on load (prevents Chrome mobile resize jank)
+    // Lock video background and hero height on load (prevents Chrome mobile resize jank)
     const videoBg = document.querySelector('.video-bg');
-    if (videoBg) {
-      videoBg.style.height = window.innerHeight + 'px';
-    }
+    const heroSection = document.querySelector('.hero');
+    const lockHeight = window.innerHeight + 'px';
+    if (videoBg) videoBg.style.height = lockHeight;
+    if (heroSection) heroSection.style.minHeight = lockHeight;
 
     // Nav scroll effect
     const nav = document.getElementById('nav');
