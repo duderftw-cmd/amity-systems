@@ -808,36 +808,6 @@
     text-shadow: 0 2px 8px rgba(0,0,0,0.6);
   }
 
-  /* Mobile touch animations */
-  .service-card.touched {
-    background: rgba(10,14,39,0.7);
-    border-color: rgba(59,91,255,0.4);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(59,91,255,0.08);
-  }
-  .service-card.touched::before { opacity: 1; }
-  .service-card.touched .service-icon {
-    background: rgba(59,91,255,0.2);
-    border-color: rgba(59,91,255,0.4);
-    transform: scale(1.1) rotate(-4deg);
-    box-shadow: 0 0 20px rgba(59,91,255,0.15);
-  }
-  .how-step.touched .step-number {
-    background: rgba(59,91,255,0.2);
-    border-color: #5271ff;
-    transform: scale(1.08);
-    box-shadow: 0 0 30px rgba(59,91,255,0.2);
-  }
-  .how-step.touched .step-icon {
-    transform: scale(1.15);
-  }
-  .stat-item.touched {
-    transform: translateY(-4px);
-  }
-  .stat-item.touched .stat-number {
-    filter: drop-shadow(0 0 20px rgba(143,164,255,0.35));
-  }
-
   @media (max-width: 768px) {
     .how-pipeline {
       flex-direction: column;
@@ -1451,17 +1421,6 @@
     document.querySelectorAll('.stat-number[data-target]').forEach(el => {
       statsObserver.observe(el);
     });
-    // Mobile touch animations — mirror hover effects on tap
-    if ('ontouchstart' in window) {
-      document.querySelectorAll('.service-card, .how-step, .stat-item').forEach(el => {
-        el.addEventListener('touchstart', () => {
-          el.classList.add('touched');
-        }, { passive: true });
-        el.addEventListener('touchend', () => {
-          setTimeout(() => el.classList.remove('touched'), 400);
-        }, { passive: true });
-      });
-    }
   </script>
 </body>
 </html>
