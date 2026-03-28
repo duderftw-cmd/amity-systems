@@ -1145,7 +1145,10 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg" style="opacity: 0; transition: opacity 0.5s ease;">
+    <video id="hero-intro" autoplay muted playsinline webkit-playsinline preload="auto" poster="hero_fallback.jpg">
+      <source src="hero_intro.mp4" type="video/mp4">
+    </video>
+    <video id="hero-loop" muted loop playsinline webkit-playsinline preload="auto" style="opacity:0; transition: opacity 1.5s ease;">
       <source src="hero_loop.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1354,25 +1357,17 @@
       nav.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Hide video until playing, then fade in
-    const bgVideo = document.querySelector('.video-bg video');
-    if (bgVideo) {
-      bgVideo.muted = true;
-      bgVideo.setAttribute('muted', '');
+    // Video: play intro once, then crossfade to seamless loop
+    const introVideo = document.getElementById('hero-intro');
+    const loopVideo = document.getElementById('hero-loop');
 
-      bgVideo.addEventListener('playing', () => {
-        bgVideo.style.opacity = '1';
-      }, { once: true });
-
-      bgVideo.play().catch(() => {});
-
-      ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
-        document.addEventListener(evt, () => {
-          bgVideo.muted = true;
-          bgVideo.play().catch(() => {});
-        }, { once: true });
-      });
-    }
+    introVideo.addEventListener('ended', () => {
+      loopVideo.play();
+      loopVideo.style.opacity = '1';
+      setTimeout(() => {
+        introVideo.style.display = 'none';
+      }, 1500);
+    });
 
     // Hamburger menu toggle
     const hamburger = document.getElementById('hamburger');
