@@ -1145,7 +1145,7 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline preload="none" poster="hero_fallback.jpg">
+    <video autoplay muted loop playsinline preload="auto" poster="hero_fallback.jpg">
       <source src="hero_intro.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -1353,6 +1353,16 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 50);
     });
+
+    // Force autoplay on mobile
+    const bgVideo = document.querySelector('.video-bg video');
+    if (bgVideo) {
+      bgVideo.play().catch(() => {
+        document.addEventListener('touchstart', () => {
+          bgVideo.play();
+        }, { once: true });
+      });
+    }
 
     // Hamburger menu toggle
     const hamburger = document.getElementById('hamburger');
